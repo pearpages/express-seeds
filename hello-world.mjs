@@ -1,10 +1,13 @@
-import http from 'http';
+import http from "http";
 const port = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' })
-  res.end('Hello world!')
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello world!");
 });
 
-server.listen(port, () => console.log(`server started on port ${port}; ` +
-  'press Ctrl-C to terminate....'));
+server.listen(port, () =>
+  console.log(
+    `server started on port ${port}; ` + "press Ctrl-C to terminate...."
+  )
+);
