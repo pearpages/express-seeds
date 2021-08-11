@@ -1,13 +1,12 @@
 import http from "http";
-const port = process.env.PORT || 3000;
+import process from 'process';
+import { runServer } from '../shared/run-server.mjs';
+
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
   res.end("Hello world!");
 });
 
-server.listen(port, () =>
-  console.log(
-    `server started on port ${port}; ` + "press Ctrl-C to terminate...."
-  )
-);
+runServer(server, PORT);

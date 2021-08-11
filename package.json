@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./hello-world.mjs"
+    "lint": "eslint  --ext .js,.mjs \"src/\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^7.32.0",
     "prettier": "^2.3.2"
   }
 }

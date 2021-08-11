@@ -1,13 +1,9 @@
-import { write } from "fs";
 import http from "http";
+import process from "process";
+import { normalizeUrl } from "../shared/normalize-url.mjs";
+import { runServer } from "../shared/run-server.mjs";
 
-const port = process.env.PORT || 3000;
-
-function normalizeUrl(url) {
-  // normalize url by removing querystring, optional
-  // trailing slash, and making it lowercase
-  return url.replace(/\/?(?:\?.*)?$/, "").toLowerCase();
-}
+const PORT = process.env.PORT || 3000;
 
 const TEXT_HEADER = { "Content-Type": "text/plain" };
 
@@ -31,8 +27,4 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(port, () =>
-  console.log(
-    `server started on port ${port}; ` + "press Ctrl-C to terminate...."
-  )
-);
+runServer(server, PORT);
