@@ -1,11 +1,12 @@
 import express from "express";
 import process from "process";
 import path from "path";
-import { fileURLToPath } from 'url';
-import expressHandlebars from "express-handlebars";
-import { runExpress } from "../../shared/run-express.mjs";
+import { runExpress } from "../../shared/express/run.mjs";
 import { getDirname } from "../../shared/dirname.mjs";
 import * as handlers from "./handlers/handlers.mjs";
+import { hideAppDetailsInResponse } from "../../shared/express/hide-detais-in-response.mjs";
+import { setHandlebarsWithLayout } from "../../shared/express/set-handlebars-with-layout.mjs";
+import { isModuleRun } from "../../shared/is-module-run.mjs";
 
 const PORT = process.env.PORT || 3000;
 const __dirname = getDirname(import.meta.url);
@@ -13,12 +14,8 @@ const PUBLIC_FOLDER = path.join(__dirname, 'public');
 
 const app = express();
 
-app.engine(
-  "handlebars",
-  expressHandlebars({
-    defaultLayout: "main",
-  })
-);
+hideAppDetailsInResponse(app);
+setHandlebarsWithLayout(app);
 
 app.set("views", path.join(__dirname, 'views'));
 app.set("view engine", "handlebars");
@@ -36,6 +33,6 @@ app.use(handlers.serverError);
 
 export const runApp = () => runExpress(app, PORT);
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (isModuleRun) {
   runApp();
 }
