@@ -1,16 +1,15 @@
 import express from "express";
 import process from "process";
 import path from "path";
+import { fileURLToPath } from 'url';
 import expressHandlebars from "express-handlebars";
 import { runExpress } from "../../shared/run-express.mjs";
 import { getDirname } from "../../shared/dirname.mjs";
-import { getRandomFortune } from "./about/fortunes.mjs";
+import * as handlers from "./handlers/handlers.mjs";
 
 const PORT = process.env.PORT || 3000;
 const __dirname = getDirname(import.meta.url);
 const PUBLIC_FOLDER = path.join(__dirname, 'public');
-
-const makeResponseTypeText = (res) => res.type("text/plain");
 
 const app = express();
 
@@ -26,24 +25,17 @@ app.set("view engine", "handlebars");
 
 app.use(express.static(PUBLIC_FOLDER));
 
-app.get("/", (req, res) => res.render("home"));
+app.get("/", handlers.home);
 
-app.get("/about", (req, res) =>
-  res.render("about", { fortune: getRandomFortune() })
-);
+app.get("/about", handlers.about);
 
-app.use((req, res) => {
-  makeResponseTypeText(res);
-  res.status(404);
-  res.render("404");
-});
+app.use(handlers.notFound);
 
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.error(err.message);
-  makeResponseTypeText(res);
-  res.status(500);
-  res.render("500");
-});
+app.use(handlers.serverError);
 
-runExpress(app, PORT);
+export const runApp = () => runExpress(app, PORT);
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  runApp();
+}
